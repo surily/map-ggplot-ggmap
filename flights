@@ -1,0 +1,34 @@
+rm(list=ls())
+install.packages("nycflights13")
+library(nycflights13)
+library(dplyr)
+library(ggplot2)
+
+
+dim(flights)
+data <- flights
+head(data)
+str(data)
+filter_1 <- filter(data,month == 9|month==10,data$day<2)
+
+
+slice_1 <- slice(data,1:10)
+arr_dep <- arrange(data[1:5,],dep_delay)
+?sample
+?table
+table(data$origin)
+
+delay <- data %>% 
+  group_by(origin) %>% 
+  summarise(dist=mean(distance),
+            delay=mean(dep_delay,na.rm=TRUE),
+            count=n())
+
+data1 <- na.omit(data)
+ggplot(delay,aes(x=dist,y=delay))+
+  geom_point(aes(color=count,size=count))+
+  xlab('Distance')+
+  ggtitle("Distance vs. Delay")+
+  geom_smooth()+
+  scale_size_area()    ### can't show 
+
